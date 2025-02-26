@@ -1,0 +1,13 @@
+data:
+
+  - code_isbn: "0156195445"
+    titre: "Le fond de la bibliothèque"
+    id_auteur: 0
+    id_editeur: 0
+    id_format: 0
+
+  - code_isbn: "0750878851"
+    titre: "Hyrra Pettor"
+    id_auteur: 1
+    id_editeur: 1
+    id_format: 2
