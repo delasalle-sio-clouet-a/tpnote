@@ -1,0 +1,10 @@
+data:
+
+  - id: 0
+    libelle: "Poche"
+
+  - id: 1
+    libelle: "Broché"
+
+  - id: 2
+    libelle: "Grand format"

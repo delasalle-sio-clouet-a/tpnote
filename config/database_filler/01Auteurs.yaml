@@ -1,0 +1,13 @@
+data:
+
+  - id: 0
+    nom: "Célert"
+    prenom: "Jacques"
+
+  - id: 1
+    nom: "Alain"
+    prenom: "Terieur"
+
+  - id: 2
+    nom: "Alex"
+    prenom: "Terieur"
