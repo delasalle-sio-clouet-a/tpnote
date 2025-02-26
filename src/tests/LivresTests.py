@@ -1,4 +1,5 @@
 import pytest
+from flask.testing import FlaskClient
 
 def test_ajout_livre_valide():
     # résultat attendu : livre ajouté

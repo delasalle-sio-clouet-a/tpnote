@@ -1,4 +1,5 @@
 import pytest
+from flask.testing import FlaskClient
 
 def test_nouvelle_reservation_valide():
     # résultat attendu : reservation ajoutée

@@ -1,4 +1,5 @@
 import pytest
+from flask.testing import FlaskClient
 
 def test_ajout_format_valide():
     # résultat attendu : format ajouté

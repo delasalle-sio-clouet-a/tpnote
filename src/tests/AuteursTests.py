@@ -1,4 +1,5 @@
 import pytest
+from flask.testing import FlaskClient
 
 def test_ajout_auteur_valide():
     # résultat attendu : auteur ajouté
