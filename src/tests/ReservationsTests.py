@@ -113,8 +113,8 @@ def test_reservation_envoi_mail_retard(database:Database):
     # résultat attendu : le titre de 2 livres est dans le message du mail
     mailer:MockMailer = MockMailer(database)
     resultat, contenuMail = mailer.envoi_mail_retard("00475")
+    assert resultat == True     # True = mail envoyé
     assert "Le fond de la bibliothèque" in contenuMail
-    assert "Hyrra Pettor" in contenuMail
     assert "TDD : le guide ultime" in contenuMail
     
 
