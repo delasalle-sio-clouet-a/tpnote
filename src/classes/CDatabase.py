@@ -23,7 +23,7 @@ class Database:
         return self.handler.adherents_get_by_code(jsonData)
     
     def adherents_insert(self, _adherent:Adherent) -> bool:
-        return False
+        return self.handler.adherents_insert(_adherent)
 
     ###########
     # AUTEURS #
