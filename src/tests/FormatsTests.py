@@ -13,9 +13,24 @@ from src.exceptions.InvalidFormatException import InvalidFormatException
 from src.exceptions.DuplicataException import DuplicataException
 
 def test_ajout_format_valide(database:Database):
-    # résultat attendu : format ajouté
-    assert False
+    # résultat attendu : éditeur ajouté
+    format = Format(3, "Revue")
+    resultat = database.formats_insert(format)
+    assert resultat == True
 
 def test_ajout_format_duplicata(database:Database):
-    # résultat attendu : format NON ajouté
-    assert False
+    # résultat attendu : éditeur NON ajouté car l'id existe déjà
+    format = Format(0, "Revue")
+    with pytest.raises(DuplicataException) as error:
+        resultat = database.formats_insert(format)
+    assert error.value == "Un éditeur possède déjà cet identifiant."
+
+def test_get_format_existant(database:Database):
+    # résultat attendu : une instance d'Editeur est retournée
+    format = database.formats_get_by_id("0")
+    assert isinstance(format, Format)
+
+def test_get_format_inexistant(database:Database):
+    # résultat attendu : None est retourné
+    format = database.formats_get_by_id("15774")
+    assert format == None

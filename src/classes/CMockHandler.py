@@ -20,16 +20,16 @@ class MockHandler(DataHandler):
         self.data:dict = {}
 
     def adherents_get_by_code(self, code:str) -> Adherent:
-        pass
+        return None
 
     def auteurs_get_by_id(self, id:int) -> Auteur:
-        pass
+        return None
 
     def editeurs_get_by_id(self, id:int) -> Editeur:
-        pass
+        return None
 
     def formats_get_by_id(self, id:int) -> Format:
-        pass
+        return None
 
     def livres_get_by_isbn(self, code:str) -> Livre:
-        pass
+        return None

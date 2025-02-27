@@ -23,25 +23,34 @@ class Database:
         return self.handler.adherents_get_by_code(jsonData)
     
     def adherents_insert(self, _adherent:Adherent) -> bool:
-        return True
+        return False
 
     ###########
     # AUTEURS #
     ###########
     def auteurs_get_by_id(self, jsonData:str) -> Auteur:
         return self.handler.auteurs_get_by_id(jsonData)
+    
+    def auteurs_insert(self, _auteur:Auteur) -> bool:
+        return False
 
     ############
     # EDTIEURS #
     ############
     def editeurs_get_by_id(self, jsonData:str) -> Editeur:
         return self.handler.editeurs_get_by_id(jsonData)
+    
+    def editeurs_insert(self, _editeur:Editeur) -> bool:
+        return False
 
     ###########
     # FORMATS #
     ###########
     def formats_get_by_id(self, jsonData:str) -> Format:
         return self.handler.formats_get_by_id(jsonData)
+    
+    def formats_insert(self, _format:Format) -> bool:
+        return False
 
     ##########
     # LIVRES #
@@ -49,6 +58,11 @@ class Database:
     def livres_get_by_isbn(self, jsonData:str) -> Livre:
         return self.handler.livres_get_by_isbn(jsonData)
     
+    def livres_insert(self, _livre:Livre) -> bool:
+        return False
+    
     ################
     # RESERVATIONS #
     ################
+    def reservations_insert(self, _reservation:Reservation) -> bool:
+        return False

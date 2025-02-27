@@ -14,11 +14,16 @@ from src.exceptions.DuplicataException import DuplicataException
 
 def test_ajout_auteur_valide(database:Database):
     # résultat attendu : auteur ajouté
-    assert False
+    auteur = Auteur(3, "Desbuts", "Jean-Marc")
+    resultat = database.auteurs_insert(auteur)
+    assert resultat == True
 
 def test_ajout_auteur_duplicata(database:Database):
-    # résultat attendu : auteur NON ajouté
-    assert False
+    # résultat attendu : auteur NON ajouté car l'id existe déjà
+    auteur = Auteur(2, "Desbuts", "Jean-Marc")
+    with pytest.raises(DuplicataException) as error:
+        resultat = database.auteurs_insert(auteur)
+    assert error.value == "Un auteur possède déjà cet identifiant."
 
 def test_get_auteur_existant(database:Database):
     # résultat attendu : une instance d'Auteur est retournée
