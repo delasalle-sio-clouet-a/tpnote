@@ -78,20 +78,31 @@ def test_nouvelle_reservation_adherent_maximum(database:Database):
 
 def test_reservation_rendu_existant(database:Database):
     # résultat attendu : réservation marquée comme rendue
-    assert False
+    resultat = database.reservations_set_rendu(0, True)
+    assert resultat == True
 
 def test_reservation_rendu_inexistant(database:Database):
     # résultat attendu : réservation NON marquée comme rendu car réservation inexistante
-    assert False
+    with pytest.raises(MissingDataException) as error:
+        resultat = database.reservations_set_rendu(979898, True)
+    assert error.value == "Cette réservation n'existe pas."
+
+def test_reservation_get_en_cours_adherent(database:Database):
+    # résultat attendu : 3 instances de réservations sont retournée
+    resultat = database.reservations_get_en_cours_by_code_adherent("000476")
+    assert len(resultat) == 3
 
 def test_reservation_get_retards_adherent(database:Database):
     # résultat attendu : 2 instances de réservations sont retournées
-    assert False
+    resultat = database.reservations_get_retards_by_code_adherent("000475")
+    assert len(resultat) == 2
 
 def test_reservation_get_historique_adherent(database:Database):
-    # résultat attendu : 3 instances de réservations sont retournées
-    assert False
+    # résultat attendu : 4 instances de réservations sont retournées
+    resultat = database.reservations_get_all_by_code_adherent("000475")
+    assert len(resultat) == 4
 
 def test_reservation_get_retards_tous(database:Database):
     # résultat attendu : 3 instances de réservations sont retournées
-    assert False
+    resultat = database.reservations_get_retards_all()
+    assert len(resultat) == 3
