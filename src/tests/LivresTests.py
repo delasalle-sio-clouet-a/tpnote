@@ -28,7 +28,7 @@ def test_ajout_livre_isbn_valide_avec_tirets(database:Database):
 
 def test_ajout_livre_isbn_X_valide(database:Database):
     # résultat attendu : livre ajouté
-    livre = Livre("030640615X", "Le jeu du trône", 0, 0, 0)
+    livre = Livre("123456789X", "Le jeu du trône", 0, 0, 0)
     resultat = database.livres_insert(livre)
     assert resultat == True
 
@@ -39,12 +39,19 @@ def test_ajout_livre_isbn_clef_invalide(database:Database):
         resultat = database.livres_insert(livre)
     assert str(error.value) == "La clé du code isbn est incorrecte."
 
-def test_ajout_livre_isbn_caractere_invalide(database:Database):
-    # résultat attendu : livre NON ajouté car un caractère de l'isbn est invalide
-    livre = Livre("0820000300", "Le jeu du trône", 0, 0, 0)
+def test_ajout_livre_isbn_trop_long_invalide(database:Database):
+    # résultat attendu : livre NON ajouté car l'isbn est trop long (!= de 10 caractères)
+    livre = Livre("082000030099", "Le jeu du trône", 0, 0, 0)
     with pytest.raises(InvalidIsbnException) as error:
         resultat = database.livres_insert(livre)
-    assert str(error.value) == "La clé du code isbn contient des caractères non autorisés."
+    assert str(error.value) == "Le code isbn doit faire 10 caractères."
+
+def test_ajout_livre_isbn_caractere_invalide(database:Database):
+    # résultat attendu : livre NON ajouté car un caractère de l'isbn est invalide
+    livre = Livre("08200O0300", "Le jeu du trône", 0, 0, 0)
+    with pytest.raises(InvalidIsbnException) as error:
+        resultat = database.livres_insert(livre)
+    assert str(error.value) == "Le code isbn contient des caractères non autorisés."
 
 def test_ajout_livre_duplicata(database:Database):
     # résultat attendu : livre NON ajouté car le code isbn existe déjà

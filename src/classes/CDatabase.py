@@ -50,7 +50,7 @@ class Database:
         return self.handler.formats_get_by_id(id)
     
     def formats_insert(self, _format:Format) -> bool:
-        return False
+        return self.handler.formats_insert(_format)
 
     ##########
     # LIVRES #
@@ -59,7 +59,7 @@ class Database:
         return self.handler.livres_get_by_isbn(isbn)
     
     def livres_insert(self, _livre:Livre) -> bool:
-        return False
+        return self.handler.livres_insert(_livre)
     
     ################
     # RESERVATIONS #
@@ -67,7 +67,7 @@ class Database:
     def reservations_insert(self, _reservation:Reservation) -> bool:
         return False
     
-    def reservations_get_all_by_code_adherent(self, ) -> list:
+    def reservations_get_all_by_code_adherent(self, _code_adherent:str) -> list:
         return False
     
     def reservations_get_en_cours_by_code_adherent(self, _code_adherent:str) -> list:

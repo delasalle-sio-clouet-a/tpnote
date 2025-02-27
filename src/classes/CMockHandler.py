@@ -83,21 +83,21 @@ class MockHandler(DataHandler):
     # ADHERENTS #
     #############
     def adherents_get_by_code(self, code:str) -> Adherent:
-        lesAdherents:list = self.getData("Adherent")
-        unAdherent:Adherent
-        for unAdherent in lesAdherents:
-            if(unAdherent.code_adherent == code):
-                return unAdherent
+        lesExistants:list = self.getData("Adherent")
+        unExistant:Adherent
+        for unExistant in lesExistants:
+            if(unExistant.code_adherent == code):
+                return unExistant
         return None
     
 
     def adherents_insert(self, _adherent:Adherent) -> bool:
-        lesAdherents = self.getData("Adherent")
-        unAdherent:Adherent
+        lesExistants = self.getData("Adherent")
+        unExistant:Adherent
 
         # controle code adhérent unique
-        for unAdherent in lesAdherents:
-            if(unAdherent.code_adherent == _adherent.code_adherent):
+        for unExistant in lesExistants:
+            if(unExistant.code_adherent == _adherent.code_adherent):
                 raise DuplicataException("Ce code adhérent est déjà utilisé.")
             
         # controle email valide
@@ -118,21 +118,21 @@ class MockHandler(DataHandler):
     # AUTEURS #
     ###########
     def auteurs_get_by_id(self, id:int) -> Auteur:
-        lesAuteurs:list = self.getData("Auteur")
-        unAuteur:Auteur
-        for unAuteur in lesAuteurs:
-            if(unAuteur.id == id):
-                return unAuteur
+        lesExistants:list = self.getData("Auteur")
+        unExistant:Auteur
+        for unExistant in lesExistants:
+            if(unExistant.id == id):
+                return unExistant
         return None
     
 
     def auteurs_insert(self, _auteur:Auteur) -> bool:
-        lesAuteurs = self.getData("Auteur")
-        unAuteur:Auteur
+        lesExistants = self.getData("Auteur")
+        unExistant:Auteur
 
         # controle id unique
-        for unAuteur in lesAuteurs:
-            if(unAuteur.id == _auteur.id):
+        for unExistant in lesExistants:
+            if(unExistant.id == _auteur.id):
                 raise DuplicataException("Un auteur possède déjà cet identifiant.")
 
         return True # ajout réussi
@@ -142,21 +142,21 @@ class MockHandler(DataHandler):
     # EDITEURS #
     ############
     def editeurs_get_by_id(self, id:int) -> Editeur:
-        lesEditeurs:list = self.getData("Editeur")
-        unEditeur:Editeur
-        for unEditeur in lesEditeurs:
-            if(unEditeur.id == id):
-                return unEditeur
+        lesExistants:list = self.getData("Editeur")
+        unExistant:Editeur
+        for unExistant in lesExistants:
+            if(unExistant.id == id):
+                return unExistant
         return None
     
 
     def editeurs_insert(self, _editeur:Editeur) -> bool:
-        lesEditeurs = self.getData("Editeur")
-        unEditeur:Editeur
+        lesExistants = self.getData("Editeur")
+        unExistant:Editeur
 
         # controle id unique
-        for unEditeur in lesEditeurs:
-            if(unEditeur.id == _editeur.id):
+        for unExistant in lesExistants:
+            if(unExistant.id == _editeur.id):
                 raise DuplicataException("Un éditeur possède déjà cet identifiant.")
 
         return True # ajout réussi
@@ -166,12 +166,24 @@ class MockHandler(DataHandler):
     # FORMATS #
     ###########
     def formats_get_by_id(self, id:int) -> Format:
-        lesFormats:list = self.getData("Format")
-        unFormat:Format
-        for unFormat in lesFormats:
-            if(unFormat.id == id):
-                return unFormat
+        lesExistants:list = self.getData("Format")
+        unExistant:Format
+        for unExistant in lesExistants:
+            if(unExistant.id == id):
+                return unExistant
         return None
+    
+
+    def formats_insert(self, _format:Format) -> bool:
+        lesExistants = self.getData("Format")
+        unExistant:Format
+
+        # controle id unique
+        for unExistant in lesExistants:
+            if(unExistant.id == _format.id):
+                raise DuplicataException("Un format possède déjà cet identifiant.")
+
+        return True # ajout réussi
 
 
     ##########
@@ -184,3 +196,39 @@ class MockHandler(DataHandler):
             if(unLivre.code_isbn == id):
                 return unLivre
         return None
+    
+    def livres_insert(self, _livre:Livre) -> bool:
+        lesExistants = self.getData("Livre")
+        unExistant:Livre
+
+        # controle isbn unique
+        for unExistant in lesExistants:
+            if(unExistant.code_isbn == _livre.code_isbn):
+                raise DuplicataException("Un livre possède déjà ce code isbn.")
+        
+        # transformation de l'isbn s'il contient des tirets
+        _livre.code_isbn = _livre.code_isbn.replace("-", "")
+
+        # controle longueur du code isbn
+        if(len(_livre.code_isbn) != 10):
+            raise InvalidIsbnException("Le code isbn doit faire 10 caractères.")
+        
+        # controle des caracteres du code isbn (sauf dernier caractere qui accepte le 'X')
+        caracteresAutorisesHorsClef = ["0","1","2","3","4","5","6","7","8","9"]
+        for index, unCaractere in enumerate(str(_livre.code_isbn)[:-1]):
+            if(unCaractere not in caracteresAutorisesHorsClef):
+                raise InvalidIsbnException("Le code isbn contient des caractères non autorisés.")
+        if(str(_livre.code_isbn)[-1] not in caracteresAutorisesHorsClef+["X"]):
+            raise InvalidIsbnException("Le code isbn contient des caractères non autorisés.")
+        
+        # controle de la clef du code isbn
+        # controle de la clef du code isbn
+        poids:int = len(_livre.code_isbn)
+        modulo:int = poids + 1
+        total:int = 0
+        total = sum( [ (poids-index)*int(unCaractere.replace("X","10")) for index, unCaractere in enumerate(_livre.code_isbn) ] )
+
+        if(total%modulo != 0):
+            raise InvalidIsbnException("La clé du code isbn est incorrecte.")
+
+        return True # ajout réussi
