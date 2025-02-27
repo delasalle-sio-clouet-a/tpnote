@@ -66,3 +66,15 @@ class Database:
     ################
     def reservations_insert(self, _reservation:Reservation) -> bool:
         return False
+    
+    def reservations_get_by_code_adherent(self, _code_adherent:str) -> list:
+        return False
+    
+    def reservations_get_retards_by_code_adherent(self, _code_adherent:str) -> list:
+        return False
+    
+    def reservations_get_retards_all(self) -> list:
+        return False
+    
+    def reservations_set_rendu(self, _code_adherent:str, _code_isbn:str, _rendu:bool):
+        return False

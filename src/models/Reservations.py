@@ -9,3 +9,4 @@ class Reservations(db.Model):
     code_isbn = db.Column(db.String(10), ForeignKey("livres.code_isbn"), primary_key=True, nullable=False)
     date_heure_debut = db.Column(db.DateTime, nullable=False)
     date_heure_fin = db.Column(db.DateTime, nullable=True)
+    rendu = db.Column(db.Boolean, nullable=False)
