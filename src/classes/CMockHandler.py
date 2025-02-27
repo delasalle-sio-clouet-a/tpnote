@@ -2,6 +2,8 @@ import os, yaml, re
 
 from src.classes.CDataHandler import DataHandler
 
+from datetime import timedelta, date, datetime
+
 from src.classes.CAdherent import Adherent
 from src.classes.CAuteur import Auteur
 from src.classes.CEditeur import Editeur
@@ -60,6 +62,13 @@ class MockHandler(DataHandler):
                     for uneData in data:
                         instance = globals()[nomModele]()
                         for uneVariable in uneData:
+
+                            if("date" in uneVariable):
+                                if("heure" in uneVariable):
+                                    uneData[uneVariable] = datetime.strptime(uneData[uneVariable], "%Y-%m-%d %H:%M:%S")
+                                else:
+                                    uneData[uneVariable] = datetime.strptime(uneData[uneVariable], "%Y-%m-%d").date()
+
                             instance.__dict__[uneVariable] = uneData[uneVariable]
 
                         if(nomModele not in self.data):
@@ -258,6 +267,27 @@ class MockHandler(DataHandler):
                 return unExistant
         return None
     
+    
+    def reservations_get_all_by_code_isbn(self, _isbn):
+        lesExistants:list = self.getData("Reservation")
+        unExistant:Reservation
+        reservationsLivre:list = []
+        for unExistant in lesExistants:
+            if(unExistant.code_isbn == _isbn):
+                reservationsLivre.append(unExistant)
+        return reservationsLivre
+    
+
+    def reservations_get_all_by_code_adherent(self, _code_adherent):
+        lesExistants:list = self.getData("Reservation")
+        unExistant:Reservation
+        reservationsLivre:list = []
+        for unExistant in lesExistants:
+            if(unExistant.code_adherent == _code_adherent):
+                reservationsLivre.append(unExistant)
+        return reservationsLivre
+    
+
     def reservations_insert(self, _reservation:Reservation) -> bool:
 
         # controle adherent existant
@@ -269,6 +299,25 @@ class MockHandler(DataHandler):
         unLivre = self.livres_get_by_isbn(_reservation.code_isbn)
         if(unLivre == None or isinstance(unLivre, Livre) == False):
             raise MissingDataException("Le livre n'existe pas.")
+        
+        # controle cohérence date fin
+        if(_reservation.date_heure_fin < _reservation.date_heure_debut):
+            raise ValueError("La date de fin est inférieure à la date de début.")
+        
+        # controle duree de la reservation
+        delta:timedelta = _reservation.date_heure_fin - _reservation.date_heure_debut
+        nbJours:float = delta.total_seconds() / 60 / 60 / 24
+        print(nbJours)
+        if(nbJours > 4*30):
+            raise ValueError("La réservation fait plus de quatre mois.")
+
+        # controle collision
+        lesReservationsDuLivre:list = self.reservations_get_all_by_code_isbn(_reservation.code_isbn)
+        uneReservation:Reservation
+        for uneReservation in lesReservationsDuLivre:
+            if(uneReservation.rendu == False):  # ignorer les réservations déjà closes (livre rendu)
+                if(uneReservation.date_heure_fin >= _reservation.date_heure_debut or uneReservation.date_heure_debut <= _reservation.date_heure_fin):
+                    raise ValueError("Ce livre est déjà réservé dans cet intervalle.")
 
         return True # ajout réussi
     

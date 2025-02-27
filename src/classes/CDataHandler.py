@@ -73,6 +73,9 @@ class DataHandler:
     def reservations_get_all_by_code_adherent(self, ) -> list:
         raise UndefinedMethodException()
     
+    def reservations_get_all_by_code_isbn(self, _isbn:str) -> list:
+        raise UndefinedMethodException()
+    
     def reservations_get_en_cours_by_code_adherent(self, _code_adherent:str) -> list:
         raise UndefinedMethodException()
     

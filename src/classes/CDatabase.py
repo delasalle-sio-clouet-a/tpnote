@@ -71,7 +71,10 @@ class Database:
         return self.handler.reservations_insert(_reservation)
     
     def reservations_get_all_by_code_adherent(self, _code_adherent:str) -> list:
-        return False
+        return self.handler.reservations_get_all_by_code_adherent(_code_adherent)
+    
+    def reservations_get_all_by_code_isbn(self, _isbn:str) -> list:
+        return self.handler.reservations_get_all_by_code_isbn(_isbn)
     
     def reservations_get_en_cours_by_code_adherent(self, _code_adherent:str) -> list:
         return False
