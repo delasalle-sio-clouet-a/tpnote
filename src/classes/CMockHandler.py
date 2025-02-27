@@ -231,17 +231,17 @@ class MockHandler(DataHandler):
         
         # controle auteur existant
         unAuteur = self.auteurs_get_by_id(_livre.id_auteur)
-        if(unAuteur == None and isinstance(unAuteur, Auteur) == False):
+        if(unAuteur == None or isinstance(unAuteur, Auteur) == False):
             raise MissingDataException("L'auteur du livre n'existe pas.")
         
         # controle editeur existant
         unEditeur = self.editeurs_get_by_id(_livre.id_editeur)
-        if(unEditeur == None and isinstance(unEditeur, Editeur) == False):
+        if(unEditeur == None or isinstance(unEditeur, Editeur) == False):
             raise MissingDataException("L'éditeur du livre n'existe pas.")
         
         # controle format existant
-        unFormat = self.editeurs_get_by_id(_livre.id_format)
-        if(unFormat == None and isinstance(unFormat, Format) == False):
+        unFormat = self.formats_get_by_id(_livre.id_format)
+        if(unFormat == None or isinstance(unFormat, Format) == False):
             raise MissingDataException("Le format du livre n'existe pas.")
 
         return True # ajout réussi
@@ -250,16 +250,34 @@ class MockHandler(DataHandler):
     ################
     # RESERVATIONS #
     ################
-    def reservations_insert(self, _reservation:Reservation):
+    def reservations_get_by_id(self, _id):
+        lesExistants:list = self.getData("Reservation")
+        unExistant:Reservation
+        for unExistant in lesExistants:
+            if(unExistant.id == _id):
+                return unExistant
+        return None
+    
+    def reservations_insert(self, _reservation:Reservation) -> bool:
 
         # controle adherent existant
         unAdherent = self.adherents_get_by_code(_reservation.code_adherent)
-        if(unAdherent == None and isinstance(unAdherent, Adherent) == False):
+        if(unAdherent == None or isinstance(unAdherent, Adherent) == False):
             raise MissingDataException("L'adhérent n'existe pas.")
         
         # controle livre existant
         unLivre = self.livres_get_by_isbn(_reservation.code_isbn)
-        if(unLivre == None and isinstance(unLivre, Livre) == False):
+        if(unLivre == None or isinstance(unLivre, Livre) == False):
             raise MissingDataException("Le livre n'existe pas.")
 
         return True # ajout réussi
+    
+
+    def reservations_set_rendu(self, _id_reservation, _rendu) -> bool:
+
+        # controle reservation existante
+        uneReservation = self.reservations_get_by_id(_id_reservation)
+        if(uneReservation == None or isinstance(uneReservation, Reservation) == False):
+            raise MissingDataException("Cette réservation n'existe pas.")
+
+        return True # modification réussie

@@ -64,6 +64,9 @@ class Database:
     ################
     # RESERVATIONS #
     ################
+    def reservations_get_by_id(self, _id:int) -> bool:
+        return self.handler.reservations_get_by_id(_id)
+
     def reservations_insert(self, _reservation:Reservation) -> bool:
         return self.handler.reservations_insert(_reservation)
     
@@ -80,4 +83,4 @@ class Database:
         return False
     
     def reservations_set_rendu(self, _id_reservation:int, _rendu:bool) -> bool:
-        return False
+        return self.handler.reservations_set_rendu(_id_reservation, _rendu)

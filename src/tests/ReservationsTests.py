@@ -116,3 +116,19 @@ def test_reservation_envoi_mail_retard(database:Database):
     assert "Le fond de la bibliothèque" in contenuMail
     assert "Hyrra Pettor" in contenuMail
     
+
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
+# A FAIRE : TEST ANNULATION RESERVATION (donc delete)

@@ -64,6 +64,9 @@ class DataHandler:
     ################
     # RESERVATIONS #
     ################
+    def reservations_get_by_id(self, _id:int) -> bool:
+        raise UndefinedMethodException()
+
     def reservations_insert(self, _reservation:Reservation) -> bool:
         raise UndefinedMethodException()
     
