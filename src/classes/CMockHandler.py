@@ -316,8 +316,14 @@ class MockHandler(DataHandler):
         uneReservation:Reservation
         for uneReservation in lesReservationsDuLivre:
             if(uneReservation.rendu == False):  # ignorer les réservations déjà closes (livre rendu)
-                if(uneReservation.date_heure_fin >= _reservation.date_heure_debut or uneReservation.date_heure_debut <= _reservation.date_heure_fin):
+                if(uneReservation.date_heure_fin > _reservation.date_heure_debut < uneReservation.date_heure_fin
+                    or uneReservation.date_heure_debut > _reservation.date_heure_fin < uneReservation.date_heure_fin):
                     raise ValueError("Ce livre est déjà réservé dans cet intervalle.")
+                
+        # controle nombre de reservations en cours de l'adherent
+        lesReservationsEnCours = self.reservations_get_en_cours_by_code_adherent(_reservation.code_adherent)
+        if(len(lesReservationsEnCours) >= 3):
+            raise ValueError("L'adhérent a déjà atteint le nombre maximal de réservations en cours.")
 
         return True # ajout réussi
     
@@ -330,3 +336,24 @@ class MockHandler(DataHandler):
             raise MissingDataException("Cette réservation n'existe pas.")
 
         return True # modification réussie
+    
+
+    def reservations_get_en_cours_by_code_adherent(self, _code_adherent):
+        lesReservations:list = self.reservations_get_all_by_code_adherent(_code_adherent)
+        lesResEnCours:list = []
+        uneReservation:Reservation
+        for uneReservation in lesReservations:
+            if(uneReservation.date_heure_fin >= datetime.now() or uneReservation.rendu == False):
+                lesResEnCours.append(uneReservation)
+        return lesResEnCours
+    
+
+    def reservations_get_retards_by_code_adherent(self, _code_adherent):
+        lesReservations:list = self.reservations_get_all_by_code_adherent(_code_adherent)
+        lesResEnRetard:list = []
+        uneReservation:Reservation
+        for uneReservation in lesReservations:
+            if(uneReservation.date_heure_fin < datetime.now() and uneReservation.rendu == False):
+                lesResEnRetard.append(uneReservation)
+        return lesResEnRetard
+

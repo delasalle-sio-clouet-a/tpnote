@@ -11,3 +11,27 @@ data:
     id_auteur: 1
     id_editeur: 1
     id_format: 2
+
+  - code_isbn: "0241632927"
+    titre: "TDD : le guide ultime"
+    id_auteur: 2
+    id_editeur: 1
+    id_format: 2
+
+  - code_isbn: "057221457X"
+    titre: "Docker : le guide ultime"
+    id_auteur: 2
+    id_editeur: 1
+    id_format: 2
+
+  - code_isbn: "0703689347"
+    titre: "Kubernetes : le guide ultime"
+    id_auteur: 2
+    id_editeur: 1
+    id_format: 2
+
+  - code_isbn: "0941784819"
+    titre: "Java Spring : le guide du débutant"
+    id_auteur: 2
+    id_editeur: 1
+    id_format: 2

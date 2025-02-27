@@ -73,7 +73,7 @@ def test_nouvelle_reservation_adherent_maximum(database:Database):
     # résultat attendu : reservation NON ajoutée car l'adhérent a déjà atteint le nombre maximal de réservations en cours (3)
     dateDebut = datetime(2025, 7, 2, 13, 15, 00)
     dateFin = datetime(2025, 8, 17, 15, 00, 00)
-    reservation = Reservation(9, "00476", "0750878851", dateDebut, dateFin, False)
+    reservation = Reservation(9, "00477", "0941784819", dateDebut, dateFin, False)
     with pytest.raises(ValueError) as error:
         resultat = database.reservations_insert(reservation)
     assert str(error.value) == "L'adhérent a déjà atteint le nombre maximal de réservations en cours."
@@ -91,7 +91,7 @@ def test_reservation_rendu_inexistant(database:Database):
 
 def test_reservation_get_en_cours_adherent(database:Database):
     # résultat attendu : 3 instances de réservations sont retournée
-    resultat = database.reservations_get_en_cours_by_code_adherent("00476")
+    resultat = database.reservations_get_en_cours_by_code_adherent("00477")
     assert len(resultat) == 3
 
 def test_reservation_get_retards_adherent(database:Database):

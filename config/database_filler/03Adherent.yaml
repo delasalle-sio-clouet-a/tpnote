@@ -13,3 +13,10 @@ data:
     date_naissance: "2001-03-19"
     civilite: False
     email: "test@test.test"
+
+  - code_adherent: "00477"
+    nom: "Ginal"
+    prenom: "Laurent"
+    date_naissance: "1992-09-28"
+    civilite: False
+    email: "test@test.test"
