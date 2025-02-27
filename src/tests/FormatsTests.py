@@ -27,7 +27,7 @@ def test_ajout_format_duplicata(database:Database):
 
 def test_get_format_existant(database:Database):
     # résultat attendu : une instance d'Editeur est retournée
-    format = database.formats_get_by_id("0")
+    format = database.formats_get_by_id(0)
     assert isinstance(format, Format)
 
 def test_get_format_inexistant(database:Database):

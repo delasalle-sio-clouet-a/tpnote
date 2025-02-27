@@ -1,4 +1,4 @@
-import os, yaml
+import os, yaml, re
 
 from src.classes.CDataHandler import DataHandler
 
@@ -9,6 +9,13 @@ from src.classes.CFormat import Format
 from src.classes.CLivre import Livre
 from src.classes.CReservation import Reservation
 
+from src.exceptions.DuplicataException import DuplicataException
+from src.exceptions.InvalidFormatException import InvalidFormatException
+from src.exceptions.InvalidIsbnException import InvalidIsbnException
+from src.exceptions.InvalidTypeException import InvalidTypeException
+from src.exceptions.MissingDataException import MissingDataException
+from src.exceptions.UndefinedMethodException import UndefinedMethodException
+
 class MockHandler(DataHandler):
     """
     Classe héritant de DataHandler.
@@ -18,8 +25,8 @@ class MockHandler(DataHandler):
     def __init__(self):
         super().__init__()
 
-        self.data:list = {} # jdd actif
-        self.jdd:list = {} # données des fichiers lus
+        self.data:dict = {} # jdd actif
+        self.dataYaml:dict = {} # données des fichiers lus
         self.repertoireDatabaseFiller = os.path.join(os.path.abspath(f"{os.path.split(__file__)[0]}/../../config"), "database_filler")
 
         self._lecture_fichiers() # préparation du jeu de données
@@ -50,27 +57,82 @@ class MockHandler(DataHandler):
 
                 # conserver les données en mémoire
                 if(data != None and len(data) > 0):
-                    self.jdd[nomModele] = data
+                    self.dataYaml[nomModele] = data
+                    for uneData in data:
+                        instance = globals()[nomModele]()
+                        for uneVariable in uneData:
+                            instance.__dict__[uneVariable] = uneData[uneVariable]
+
+                        if(nomModele not in self.data):
+                            self.data[nomModele] = []
+                        self.data[nomModele].append(instance)
                     print(f"<DatabaseFiller> Fichier '{nom}' valide et ajouté en tant que fichier de remplissage.")
                 else:
                     print(f"<DatabaseFiller> Fichier '{nom}' ignoré : aucune donnée à insérer.")
 
-        print(self.jdd)
+        print(self.dataYaml)
+        print(self.data)
         print("<DatabaseFiller> Chargement des fichiers terminé.")
+
+    def getData(self, _modele:str) -> list:
+        return list(self.data.get(_modele, []))
 
 
 
     def adherents_get_by_code(self, code:str) -> Adherent:
+        lesAdherents:list = self.getData("Adherent")
+        unAdherent:Adherent
+        for unAdherent in lesAdherents:
+            if(unAdherent.code_adherent == code):
+                return unAdherent
         return None
 
     def auteurs_get_by_id(self, id:int) -> Auteur:
+        lesAuteurs:list = self.getData("Auteur")
+        unAuteur:Auteur
+        for unAuteur in lesAuteurs:
+            if(unAuteur.id == id):
+                return unAuteur
         return None
 
     def editeurs_get_by_id(self, id:int) -> Editeur:
+        lesEditeurs:list = self.getData("Editeur")
+        unEditeur:Editeur
+        for unEditeur in lesEditeurs:
+            if(unEditeur.id == id):
+                return unEditeur
         return None
 
     def formats_get_by_id(self, id:int) -> Format:
+        lesFormats:list = self.getData("Format")
+        unFormat:Format
+        for unFormat in lesFormats:
+            if(unFormat.id == id):
+                return unFormat
         return None
 
-    def livres_get_by_isbn(self, code:str) -> Livre:
+    def livres_get_by_isbn(self, isbn:str) -> Livre:
+        lesLivres:list = self.getData("Livre")
+        unLivre:Livre
+        for unLivre in lesLivres:
+            if(unLivre.code_isbn == id):
+                return unLivre
         return None
+    
+    def adherents_insert(self, _adherent:Adherent) -> bool:
+        lesAdherents = self.getData("Adherent")
+        unAdherent:Adherent
+
+        # controle code adhérent unique
+        for unAdherent in lesAdherents:
+            if(unAdherent.code_adherent == _adherent.code_adherent):
+                raise DuplicataException("Ce code adhérent est déjà utilisé.")
+            
+        # controle email valide
+        regex = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+        if(_adherent.email == None or re.match(regex, str(_adherent.email)) is None):
+            raise InvalidFormatException("Format de l'email invalide.")
+        
+            
+
+        return True # ajout réussi

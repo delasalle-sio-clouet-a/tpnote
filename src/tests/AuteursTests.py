@@ -27,7 +27,7 @@ def test_ajout_auteur_duplicata(database:Database):
 
 def test_get_auteur_existant(database:Database):
     # résultat attendu : une instance d'Auteur est retournée
-    auteur = database.auteurs_get_by_id("0")
+    auteur = database.auteurs_get_by_id(0)
     assert isinstance(auteur, Auteur)
 
 def test_get_auteur_inexistant(database:Database):

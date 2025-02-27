@@ -27,7 +27,7 @@ def test_ajout_editeur_duplicata(database:Database):
 
 def test_get_editeur_existant(database:Database):
     # résultat attendu : une instance d'Editeur est retournée
-    editeur = database.editeurs_get_by_id("0")
+    editeur = database.editeurs_get_by_id(0)
     assert isinstance(editeur, Editeur)
 
 def test_get_editeur_inexistant(database:Database):

@@ -5,9 +5,11 @@ data:
     prenom: "Eva"
     date_naissance: "2003-04-29"
     civilite: True
+    email: "test@test.test"
 
   - code_adherent: "00476"
     nom: "Gole"
     prenom: "Henry"
     date_naissance: "2001-03-19"
     civilite: False
+    email: "test@test.test"
