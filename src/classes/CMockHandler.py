@@ -356,4 +356,13 @@ class MockHandler(DataHandler):
             if(uneReservation.date_heure_fin < datetime.now() and uneReservation.rendu == False):
                 lesResEnRetard.append(uneReservation)
         return lesResEnRetard
+    
 
+    def reservations_get_retards_all(self):
+        lesReservations = self.getData("Reservation")
+        lesRetards:list = []
+        uneReservation:Reservation
+        for uneReservation in lesReservations:
+            if(uneReservation.date_heure_fin < datetime.now() and uneReservation.rendu == False):
+                lesRetards.append(uneReservation)
+        return lesRetards

@@ -83,7 +83,7 @@ class Database:
         return self.handler.reservations_get_retards_by_code_adherent(_code_adherent)
     
     def reservations_get_retards_all(self) -> list:
-        return False
+        return self.handler.reservations_get_retards_all()
     
     def reservations_set_rendu(self, _id_reservation:int, _rendu:bool) -> bool:
         return self.handler.reservations_set_rendu(_id_reservation, _rendu)

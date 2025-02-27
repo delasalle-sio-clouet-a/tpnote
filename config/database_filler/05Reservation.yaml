@@ -38,6 +38,20 @@ data:
   - id: 5
     code_adherent: "00477"
     code_isbn: "0703689347"
-    date_heure_debut: "2025-01-28 15:45:00"
+    date_heure_debut: "2025-01-28 09:45:00"
     date_heure_fin: "2025-02-19 17:00:00"
+    rendu: False
+
+  - id: 6
+    code_adherent: "00475"
+    code_isbn: "0703689347"
+    date_heure_debut: "2024-07-28 15:30:00"
+    date_heure_fin: "2024-08-16 17:00:00"
+    rendu: True
+
+  - id: 7
+    code_adherent: "00475"
+    code_isbn: "0241632927"
+    date_heure_debut: "2024-11-19 15:45:00"
+    date_heure_fin: "2025-01-26 17:00:00"
     rendu: False

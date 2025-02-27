@@ -107,7 +107,7 @@ def test_reservation_get_historique_adherent(database:Database):
 def test_reservation_get_retards_tous(database:Database):
     # résultat attendu : 3 instances de réservations sont retournées
     resultat = database.reservations_get_retards_all()
-    assert len(resultat) == 3
+    assert len(resultat) == 6
 
 def test_reservation_envoi_mail_retard(database:Database):
     # résultat attendu : le titre de 2 livres est dans le message du mail
