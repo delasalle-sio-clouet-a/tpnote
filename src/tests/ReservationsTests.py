@@ -1,6 +1,7 @@
 import pytest
 from flask.testing import FlaskClient
 from src.classes.CDatabase import Database
+from datetime import datetime
 
 from src.classes.CAdherent import Adherent
 from src.classes.CAuteur import Auteur
@@ -11,35 +12,86 @@ from src.classes.CReservation import Reservation
 
 from src.exceptions.InvalidFormatException import InvalidFormatException
 from src.exceptions.DuplicataException import DuplicataException
+from src.exceptions.MissingDataException import MissingDataException
 
 def test_nouvelle_reservation_valide(database:Database):
     # résultat attendu : reservation ajoutée
-    assert False
+    dateDebut = datetime(2025, 4, 21, 11, 14, 21)
+    dateFin = datetime(2025, 4, 29, 17, 00, 00)
+    reservation = Reservation(9, "000475", "0750878851", dateDebut, dateFin, False)
+    resultat = database.reservations_insert(reservation)
+    assert resultat == True
 
 def test_nouvelle_reservation_adherent_invalide(database:Database):
-    # résultat attendu : reservation NON ajoutée
-    assert False
+    # résultat attendu : reservation NON ajoutée car l'adhérent n'existe pas
+    dateDebut = datetime(2025, 4, 21, 11, 14, 21)
+    dateFin = datetime(2025, 4, 29, 17, 00, 00)
+    reservation = Reservation(9, "000100", "0750878851", dateDebut, dateFin, False)
+    with pytest.raises(MissingDataException) as error:
+        resultat = database.reservations_insert(reservation)
+    assert error.value == "L'adhérent n'existe pas."
 
 def test_nouvelle_reservation_livre_invalide(database:Database):
-    # résultat attendu : reservation NON ajoutée
+    # résultat attendu : reservation NON ajoutée car le livre n'existe pas
+    dateDebut = datetime(2025, 4, 21, 11, 14, 21)
+    dateFin = datetime(2025, 4, 29, 17, 00, 00)
+    reservation = Reservation(9, "000475", "0013223100", dateDebut, dateFin, False)
+    with pytest.raises(MissingDataException) as error:
+        resultat = database.reservations_insert(reservation)
+    assert error.value == "Le livre n'existe pas."
+
+def test_nouvelle_reservation_collision(database:Database):
+    # résultat attendu : reservation NON ajoutée car le livre est déjà réservé aux date de début et/ou de fin
+    dateDebut = datetime(2025, 1, 5, 11, 00, 00)
+    dateFin = datetime(2025, 3, 29, 17, 00, 00)
+    reservation = Reservation(9, "000475", "0750878851", dateDebut, dateFin, False)
+    with pytest.raises(ValueError) as error:
+        resultat = database.reservations_insert(reservation)
+    assert error.value == "Ce livre est déjà réservé dans cet intervalle."
+
+def test_nouvelle_reservation_date_fin_invalide(database:Database):
+    # résultat attendu : reservation NON ajoutée car la date de fin est avant la date de début
+    dateDebut = datetime(2025, 3, 5, 17, 00, 00)
+    dateFin = datetime(2025, 1, 29, 11, 00, 00)
+    reservation = Reservation(9, "000475", "0750878851", dateDebut, dateFin, False)
+    with pytest.raises(ValueError) as error:
+        resultat = database.reservations_insert(reservation)
+    assert error.value == "La date de fin est inférieure à la date de début."
+
+def test_nouvelle_reservation_duree_invalide(database:Database):
+    # résultat attendu : reservation NON ajoutée car elle dure plus de quatre mois
+    dateDebut = datetime(2025, 7, 2, 13, 15, 00)
+    dateFin = datetime(2025, 12, 27, 17, 30, 00)
+    reservation = Reservation(9, "000475", "0750878851", dateDebut, dateFin, False)
+    with pytest.raises(ValueError) as error:
+        resultat = database.reservations_insert(reservation)
+    assert error.value == "La réservation fait plus de quatre mois."
+
+def test_nouvelle_reservation_adherent_maximum(database:Database):
+    # résultat attendu : reservation NON ajoutée car l'adhérent a déjà atteint le nombre maximal de réservations en cours (3)
+    dateDebut = datetime(2025, 7, 2, 13, 15, 00)
+    dateFin = datetime(2025, 8, 17, 15, 00, 00)
+    reservation = Reservation(9, "000476", "0750878851", dateDebut, dateFin, False)
+    with pytest.raises(ValueError) as error:
+        resultat = database.reservations_insert(reservation)
+    assert error.value == "L'adhérent a déjà atteint le nombre maximal de réservations en cours."
+
+def test_reservation_rendu_existant(database:Database):
+    # résultat attendu : réservation marquée comme rendue
     assert False
 
-def test_nouvelle_reservation_date_debut_invalide(database:Database):
-    # résultat attendu : reservation NON ajoutée
+def test_reservation_rendu_inexistant(database:Database):
+    # résultat attendu : réservation NON marquée comme rendu car réservation inexistante
     assert False
 
-def test_nouvelle_reservation_adherent_maximum(database:Database): # créer une réservation lorsqu'un adhérent a le maximum de réservations en cours (>= 3)
-    # résultat attendu : reservation NON ajoutée
+def test_reservation_get_retards_adherent(database:Database):
+    # résultat attendu : 2 instances de réservations sont retournées
     assert False
 
-def test_fin_reservation_valide(database:Database):
-    # résultat attendu : reservation finalisée
+def test_reservation_get_historique_adherent(database:Database):
+    # résultat attendu : 3 instances de réservations sont retournées
     assert False
 
-def test_fin_reservation_inexistante(database:Database):
-    # résultat attendu : reservation NON finalisée
-    assert False
-
-def test_fin_reservation_date_invalide(database:Database):
-    # résultat attendu : reservation NON finalisée
+def test_reservation_get_retards_tous(database:Database):
+    # résultat attendu : 3 instances de réservations sont retournées
     assert False
