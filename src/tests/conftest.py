@@ -1,14 +1,14 @@
 import pytest
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
 from src.classes.CDatabase import Database
 from src.classes.CMockHandler import MockHandler
 
-
-# a faire : fixtures
 @pytest.fixture(scope="session")
 def database():
 
     handler = MockHandler()
-    db = Database(handler)
+    database = Database(handler)
 
-    yield db
+    yield database

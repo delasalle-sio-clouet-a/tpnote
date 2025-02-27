@@ -1,5 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from src.classes.CDatabase import Database
+
+app:Flask
+db:SQLAlchemy
 
 def start():
     import os
@@ -27,3 +31,5 @@ def start():
     # import des controllers
     repertoireControllers:str = os.path.abspath(f"{os.path.split(__file__)[0]}/controllers")
     modulesCharges = import_controllers(repertoireControllers, modulesCharges, app)
+
+    return app, db
