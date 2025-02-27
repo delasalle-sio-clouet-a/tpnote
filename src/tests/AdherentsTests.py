@@ -29,21 +29,21 @@ def test_ajout_adherent_duplicata(database:Database):
 
 def test_ajout_adherent_email_invalide(database:Database):
     # résultat attendu : adhérent NON ajouté car l'email n'est pas valide
-    adherent = Adherent("000475", "Ogne", "Paul", date(2002, 4, 29), False)
+    adherent = Adherent("000473", "Ogne", "Paul", date(2002, 4, 29), False)
     with pytest.raises(InvalidFormatException) as error:
         resultat = database.adherents_insert(adherent)
     assert str(error.value) == "Format de l'email invalide."
 
 def test_ajout_adherent_code_longueur_invalide(database:Database):
     # résultat attendu : adhérent NON ajouté car le code adhérent n'est pas de 5 caractères
-    adherent = Adherent("0004759", "Ogne", "Paul", date(2002, 4, 29), False)
+    adherent = Adherent("0004730", "Ogne", "Paul", date(2002, 4, 29), False)
     with pytest.raises(InvalidFormatException) as error:
         resultat = database.adherents_insert(adherent)
     assert str(error.value) == "Le code adhérent ne fait pas 5 caractères."
 
 def test_ajout_adherent_code_caractere_invalide(database:Database):
     # résultat attendu : adhérent NON ajouté car le code adhérent ne contient pas que des chiffres
-    adherent = Adherent("0O0475", "Ogne", "Paul", date(2002, 4, 29), False)
+    adherent = Adherent("0O0473", "Ogne", "Paul", date(2002, 4, 29), False)
     with pytest.raises(InvalidFormatException) as error:
         resultat = database.adherents_insert(adherent)
     assert str(error.value) == "Le code adhérent contient des caractères non numériques."
