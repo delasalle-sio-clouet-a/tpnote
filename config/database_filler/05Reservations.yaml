@@ -1,11 +1,15 @@
 data:
 
-  - code_adherent: "00475"
+  - id: 0
+    code_adherent: "00475"
     code_isbn: "0156195445"
-    date_heure_debut: ""
-    date_heure_fin: null
+    date_heure_debut: "2025-01-03"
+    date_heure_fin: "2025-01-28"
+    rendu: False
 
-  - code_adherent: "00476"
+  - id: 1
+    code_adherent: "00475"
     code_isbn: "0750878851"
-    date_heure_debut: 0
-    date_heure_fin: null
+    date_heure_debut: "2025-01-03"
+    date_heure_fin: "2025-01-28"
+    rendu: False

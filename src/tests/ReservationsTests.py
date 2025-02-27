@@ -1,7 +1,9 @@
 import pytest
 from flask.testing import FlaskClient
-from src.classes.CDatabase import Database
 from datetime import datetime
+
+from src.classes.CDatabase import Database
+from src.classes.CMockMailer import MockMailer
 
 from src.classes.CAdherent import Adherent
 from src.classes.CAuteur import Auteur
@@ -53,7 +55,7 @@ def test_nouvelle_reservation_date_fin_invalide(database:Database):
     # résultat attendu : reservation NON ajoutée car la date de fin est avant la date de début
     dateDebut = datetime(2025, 3, 5, 17, 00, 00)
     dateFin = datetime(2025, 1, 29, 11, 00, 00)
-    reservation = Reservation(9, "000475", "0750878851", dateDebut, dateFin, False)
+    reservation = Reservation(9, "00475", "0750878851", dateDebut, dateFin, False)
     with pytest.raises(ValueError) as error:
         resultat = database.reservations_insert(reservation)
     assert error.value == "La date de fin est inférieure à la date de début."
@@ -62,7 +64,7 @@ def test_nouvelle_reservation_duree_invalide(database:Database):
     # résultat attendu : reservation NON ajoutée car elle dure plus de quatre mois
     dateDebut = datetime(2025, 7, 2, 13, 15, 00)
     dateFin = datetime(2025, 12, 27, 17, 30, 00)
-    reservation = Reservation(9, "000475", "0750878851", dateDebut, dateFin, False)
+    reservation = Reservation(9, "00475", "0750878851", dateDebut, dateFin, False)
     with pytest.raises(ValueError) as error:
         resultat = database.reservations_insert(reservation)
     assert error.value == "La réservation fait plus de quatre mois."
@@ -71,7 +73,7 @@ def test_nouvelle_reservation_adherent_maximum(database:Database):
     # résultat attendu : reservation NON ajoutée car l'adhérent a déjà atteint le nombre maximal de réservations en cours (3)
     dateDebut = datetime(2025, 7, 2, 13, 15, 00)
     dateFin = datetime(2025, 8, 17, 15, 00, 00)
-    reservation = Reservation(9, "000476", "0750878851", dateDebut, dateFin, False)
+    reservation = Reservation(9, "00476", "0750878851", dateDebut, dateFin, False)
     with pytest.raises(ValueError) as error:
         resultat = database.reservations_insert(reservation)
     assert error.value == "L'adhérent a déjà atteint le nombre maximal de réservations en cours."
@@ -89,20 +91,28 @@ def test_reservation_rendu_inexistant(database:Database):
 
 def test_reservation_get_en_cours_adherent(database:Database):
     # résultat attendu : 3 instances de réservations sont retournée
-    resultat = database.reservations_get_en_cours_by_code_adherent("000476")
+    resultat = database.reservations_get_en_cours_by_code_adherent("00476")
     assert len(resultat) == 3
 
 def test_reservation_get_retards_adherent(database:Database):
     # résultat attendu : 2 instances de réservations sont retournées
-    resultat = database.reservations_get_retards_by_code_adherent("000475")
+    resultat = database.reservations_get_retards_by_code_adherent("00475")
     assert len(resultat) == 2
 
 def test_reservation_get_historique_adherent(database:Database):
     # résultat attendu : 4 instances de réservations sont retournées
-    resultat = database.reservations_get_all_by_code_adherent("000475")
+    resultat = database.reservations_get_all_by_code_adherent("00475")
     assert len(resultat) == 4
 
 def test_reservation_get_retards_tous(database:Database):
     # résultat attendu : 3 instances de réservations sont retournées
     resultat = database.reservations_get_retards_all()
     assert len(resultat) == 3
+
+def test_reservation_envoi_mail_retard(database:Database):
+    # résultat attendu : le titre de 2 livres est dans le message du mail
+    mailer:MockMailer = MockMailer(database)
+    resultat, contenuMail = mailer.envoi_mail_retard("00475")
+    assert "Le fond de la bibliothèque" in contenuMail
+    assert "Hyrra Pettor" in contenuMail
+    

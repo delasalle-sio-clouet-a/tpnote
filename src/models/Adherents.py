@@ -11,3 +11,4 @@ class Adherents(db.Model):
     prenom = db.Column(db.String(40), nullable=False)
     date_naissance = db.Column(db.Date, nullable=False)
     civilite = db.Column(db.Boolean, nullable=False)
+    email = db.Column(db.String(75), nullable=False)
