@@ -65,7 +65,7 @@ class Database:
     # RESERVATIONS #
     ################
     def reservations_insert(self, _reservation:Reservation) -> bool:
-        return False
+        return self.handler.reservations_insert(_reservation)
     
     def reservations_get_all_by_code_adherent(self, _code_adherent:str) -> list:
         return False

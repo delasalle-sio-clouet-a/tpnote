@@ -83,8 +83,8 @@ def test_ajout_livre_editeur_inexistant(database:Database):
 
 def test_get_livre_existant(database:Database):
     # résultat attendu : une instance de Livre est retournée
-    livre = database.livres_get_by_isbn("0156195445")
-    assert isinstance(format, Livre)
+    livre = database.livres_get_by_isbn("0750878851")
+    assert isinstance(livre, Livre)
 
 def test_get_livre_inexistant(database:Database):
     # résultat attendu : None est retourné

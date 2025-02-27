@@ -20,7 +20,7 @@ def test_nouvelle_reservation_valide(database:Database):
     # résultat attendu : reservation ajoutée
     dateDebut = datetime(2025, 4, 21, 11, 14, 21)
     dateFin = datetime(2025, 4, 29, 17, 00, 00)
-    reservation = Reservation(9, "000475", "0750878851", dateDebut, dateFin, False)
+    reservation = Reservation(9, "00475", "0750878851", dateDebut, dateFin, False)
     resultat = database.reservations_insert(reservation)
     assert resultat == True
 
@@ -28,7 +28,7 @@ def test_nouvelle_reservation_adherent_invalide(database:Database):
     # résultat attendu : reservation NON ajoutée car l'adhérent n'existe pas
     dateDebut = datetime(2025, 4, 21, 11, 14, 21)
     dateFin = datetime(2025, 4, 29, 17, 00, 00)
-    reservation = Reservation(9, "000100", "0750878851", dateDebut, dateFin, False)
+    reservation = Reservation(9, "00100", "0750878851", dateDebut, dateFin, False)
     with pytest.raises(MissingDataException) as error:
         resultat = database.reservations_insert(reservation)
     assert str(error.value) == "L'adhérent n'existe pas."
@@ -37,7 +37,7 @@ def test_nouvelle_reservation_livre_invalide(database:Database):
     # résultat attendu : reservation NON ajoutée car le livre n'existe pas
     dateDebut = datetime(2025, 4, 21, 11, 14, 21)
     dateFin = datetime(2025, 4, 29, 17, 00, 00)
-    reservation = Reservation(9, "000475", "0013223100", dateDebut, dateFin, False)
+    reservation = Reservation(9, "00475", "0013223100", dateDebut, dateFin, False)
     with pytest.raises(MissingDataException) as error:
         resultat = database.reservations_insert(reservation)
     assert str(error.value) == "Le livre n'existe pas."
@@ -46,7 +46,7 @@ def test_nouvelle_reservation_collision(database:Database):
     # résultat attendu : reservation NON ajoutée car le livre est déjà réservé aux date de début et/ou de fin
     dateDebut = datetime(2025, 1, 5, 11, 00, 00)
     dateFin = datetime(2025, 3, 29, 17, 00, 00)
-    reservation = Reservation(9, "000475", "0750878851", dateDebut, dateFin, False)
+    reservation = Reservation(9, "00475", "0750878851", dateDebut, dateFin, False)
     with pytest.raises(ValueError) as error:
         resultat = database.reservations_insert(reservation)
     assert str(error.value) == "Ce livre est déjà réservé dans cet intervalle."

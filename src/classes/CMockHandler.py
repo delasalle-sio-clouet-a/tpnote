@@ -189,11 +189,11 @@ class MockHandler(DataHandler):
     ##########
     # LIVRES #
     ##########
-    def livres_get_by_isbn(self, isbn:str) -> Livre:
+    def livres_get_by_isbn(self, _isbn:str) -> Livre:
         lesLivres:list = self.getData("Livre")
         unLivre:Livre
         for unLivre in lesLivres:
-            if(unLivre.code_isbn == id):
+            if(unLivre.code_isbn == _isbn):
                 return unLivre
         return None
     
@@ -222,13 +222,44 @@ class MockHandler(DataHandler):
             raise InvalidIsbnException("Le code isbn contient des caractères non autorisés.")
         
         # controle de la clef du code isbn
-        # controle de la clef du code isbn
         poids:int = len(_livre.code_isbn)
         modulo:int = poids + 1
         total:int = 0
         total = sum( [ (poids-index)*int(unCaractere.replace("X","10")) for index, unCaractere in enumerate(_livre.code_isbn) ] )
-
         if(total%modulo != 0):
             raise InvalidIsbnException("La clé du code isbn est incorrecte.")
+        
+        # controle auteur existant
+        unAuteur = self.auteurs_get_by_id(_livre.id_auteur)
+        if(unAuteur == None and isinstance(unAuteur, Auteur) == False):
+            raise MissingDataException("L'auteur du livre n'existe pas.")
+        
+        # controle editeur existant
+        unEditeur = self.editeurs_get_by_id(_livre.id_editeur)
+        if(unEditeur == None and isinstance(unEditeur, Editeur) == False):
+            raise MissingDataException("L'éditeur du livre n'existe pas.")
+        
+        # controle format existant
+        unFormat = self.editeurs_get_by_id(_livre.id_format)
+        if(unFormat == None and isinstance(unFormat, Format) == False):
+            raise MissingDataException("Le format du livre n'existe pas.")
+
+        return True # ajout réussi
+    
+
+    ################
+    # RESERVATIONS #
+    ################
+    def reservations_insert(self, _reservation:Reservation):
+
+        # controle adherent existant
+        unAdherent = self.adherents_get_by_code(_reservation.code_adherent)
+        if(unAdherent == None and isinstance(unAdherent, Adherent) == False):
+            raise MissingDataException("L'adhérent n'existe pas.")
+        
+        # controle livre existant
+        unLivre = self.livres_get_by_isbn(_reservation.code_isbn)
+        if(unLivre == None and isinstance(unLivre, Livre) == False):
+            raise MissingDataException("Le livre n'existe pas.")
 
         return True # ajout réussi
