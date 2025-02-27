@@ -47,3 +47,13 @@ def test_ajout_adherent_code_caractere_invalide(database:Database):
     with pytest.raises(InvalidFormatException) as error:
         resultat = database.adherents_insert(adherent)
     assert str(error.value) == "Le code adhérent contient des caractères non numériques."
+
+def test_get_adherent_existant(database:Database):
+    # résultat attendu : une instance d'Adherent est retournée
+    adherent = database.adherents_get_by_code("000475")
+    assert isinstance(adherent, Adherent)
+
+def test_get_adherent_inexistant(database:Database):
+    # résultat attendu : None est retourné
+    adherent = database.adherents_get_by_code("000100")
+    assert adherent == None

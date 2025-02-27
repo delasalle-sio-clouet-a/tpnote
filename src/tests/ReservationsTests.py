@@ -2,6 +2,16 @@ import pytest
 from flask.testing import FlaskClient
 from src.classes.CDatabase import Database
 
+from src.classes.CAdherent import Adherent
+from src.classes.CAuteur import Auteur
+from src.classes.CEditeur import Editeur
+from src.classes.CFormat import Format
+from src.classes.CLivre import Livre
+from src.classes.CReservation import Reservation
+
+from src.exceptions.InvalidFormatException import InvalidFormatException
+from src.exceptions.DuplicataException import DuplicataException
+
 def test_nouvelle_reservation_valide(database:Database):
     # résultat attendu : reservation ajoutée
     assert False
