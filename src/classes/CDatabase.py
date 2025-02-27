@@ -32,7 +32,7 @@ class Database:
         return self.handler.auteurs_get_by_id(id)
     
     def auteurs_insert(self, _auteur:Auteur) -> bool:
-        return False
+        return self.handler.auteurs_insert(_auteur)
 
     ############
     # EDTIEURS #
@@ -41,7 +41,7 @@ class Database:
         return self.handler.editeurs_get_by_id(id)
     
     def editeurs_insert(self, _editeur:Editeur) -> bool:
-        return False
+        return self.handler.editeurs_insert(_editeur)
 
     ###########
     # FORMATS #

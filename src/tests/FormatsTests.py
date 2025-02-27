@@ -23,7 +23,7 @@ def test_ajout_format_duplicata(database:Database):
     format = Format(0, "Revue")
     with pytest.raises(DuplicataException) as error:
         resultat = database.formats_insert(format)
-    assert error.value == "Un éditeur possède déjà cet identifiant."
+    assert str(error.value) == "Un éditeur possède déjà cet identifiant."
 
 def test_get_format_existant(database:Database):
     # résultat attendu : une instance d'Editeur est retournée

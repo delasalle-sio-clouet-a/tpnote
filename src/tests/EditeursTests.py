@@ -23,7 +23,7 @@ def test_ajout_editeur_duplicata(database:Database):
     editeur = Auteur(1, "Ouest-France")
     with pytest.raises(DuplicataException) as error:
         resultat = database.editeurs_insert(editeur)
-    assert error.value == "Un éditeur possède déjà cet identifiant."
+    assert str(error.value) == "Un éditeur possède déjà cet identifiant."
 
 def test_get_editeur_existant(database:Database):
     # résultat attendu : une instance d'Editeur est retournée

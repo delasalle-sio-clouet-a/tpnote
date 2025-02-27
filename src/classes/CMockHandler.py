@@ -21,7 +21,6 @@ class MockHandler(DataHandler):
     Classe héritant de DataHandler.
     Permet d'interagir avec des données de test, configurables à l'aide des fichiers du répertoire 'config/database_filler'.
     """
-
     def __init__(self):
         super().__init__()
 
@@ -74,11 +73,15 @@ class MockHandler(DataHandler):
         print(self.data)
         print("<DatabaseFiller> Chargement des fichiers terminé.")
 
+
+
     def getData(self, _modele:str) -> list:
         return list(self.data.get(_modele, []))
 
 
-
+    #############
+    # ADHERENTS #
+    #############
     def adherents_get_by_code(self, code:str) -> Adherent:
         lesAdherents:list = self.getData("Adherent")
         unAdherent:Adherent
@@ -86,39 +89,8 @@ class MockHandler(DataHandler):
             if(unAdherent.code_adherent == code):
                 return unAdherent
         return None
-
-    def auteurs_get_by_id(self, id:int) -> Auteur:
-        lesAuteurs:list = self.getData("Auteur")
-        unAuteur:Auteur
-        for unAuteur in lesAuteurs:
-            if(unAuteur.id == id):
-                return unAuteur
-        return None
-
-    def editeurs_get_by_id(self, id:int) -> Editeur:
-        lesEditeurs:list = self.getData("Editeur")
-        unEditeur:Editeur
-        for unEditeur in lesEditeurs:
-            if(unEditeur.id == id):
-                return unEditeur
-        return None
-
-    def formats_get_by_id(self, id:int) -> Format:
-        lesFormats:list = self.getData("Format")
-        unFormat:Format
-        for unFormat in lesFormats:
-            if(unFormat.id == id):
-                return unFormat
-        return None
-
-    def livres_get_by_isbn(self, isbn:str) -> Livre:
-        lesLivres:list = self.getData("Livre")
-        unLivre:Livre
-        for unLivre in lesLivres:
-            if(unLivre.code_isbn == id):
-                return unLivre
-        return None
     
+
     def adherents_insert(self, _adherent:Adherent) -> bool:
         lesAdherents = self.getData("Adherent")
         unAdherent:Adherent
@@ -133,6 +105,82 @@ class MockHandler(DataHandler):
         if(_adherent.email == None or re.match(regex, str(_adherent.email)) is None):
             raise InvalidFormatException("Format de l'email invalide.")
         
-            
+        # contrôle code adhérent (longueur + numérique)
+        if(len(_adherent.code_adherent) != 5):
+            raise InvalidFormatException("Le code adhérent ne fait pas 5 caractères.")
+        if(_adherent.code_adherent.isdigit() == False):
+            raise InvalidFormatException("Le code adhérent contient des caractères non numériques.")
 
         return True # ajout réussi
+
+
+    ###########
+    # AUTEURS #
+    ###########
+    def auteurs_get_by_id(self, id:int) -> Auteur:
+        lesAuteurs:list = self.getData("Auteur")
+        unAuteur:Auteur
+        for unAuteur in lesAuteurs:
+            if(unAuteur.id == id):
+                return unAuteur
+        return None
+    
+
+    def auteurs_insert(self, _auteur:Auteur) -> bool:
+        lesAuteurs = self.getData("Auteur")
+        unAuteur:Auteur
+
+        # controle id unique
+        for unAuteur in lesAuteurs:
+            if(unAuteur.id == _auteur.id):
+                raise DuplicataException("Un auteur possède déjà cet identifiant.")
+
+        return True # ajout réussi
+
+
+    ############
+    # EDITEURS #
+    ############
+    def editeurs_get_by_id(self, id:int) -> Editeur:
+        lesEditeurs:list = self.getData("Editeur")
+        unEditeur:Editeur
+        for unEditeur in lesEditeurs:
+            if(unEditeur.id == id):
+                return unEditeur
+        return None
+    
+
+    def editeurs_insert(self, _editeur:Editeur) -> bool:
+        lesEditeurs = self.getData("Editeur")
+        unEditeur:Editeur
+
+        # controle id unique
+        for unEditeur in lesEditeurs:
+            if(unEditeur.id == _editeur.id):
+                raise DuplicataException("Un éditeur possède déjà cet identifiant.")
+
+        return True # ajout réussi
+
+
+    ###########
+    # FORMATS #
+    ###########
+    def formats_get_by_id(self, id:int) -> Format:
+        lesFormats:list = self.getData("Format")
+        unFormat:Format
+        for unFormat in lesFormats:
+            if(unFormat.id == id):
+                return unFormat
+        return None
+
+
+    ##########
+    # LIVRES #
+    ##########
+    def livres_get_by_isbn(self, isbn:str) -> Livre:
+        lesLivres:list = self.getData("Livre")
+        unLivre:Livre
+        for unLivre in lesLivres:
+            if(unLivre.code_isbn == id):
+                return unLivre
+        return None

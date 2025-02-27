@@ -23,7 +23,7 @@ def test_ajout_auteur_duplicata(database:Database):
     auteur = Auteur(2, "Desbuts", "Jean-Marc")
     with pytest.raises(DuplicataException) as error:
         resultat = database.auteurs_insert(auteur)
-    assert error.value == "Un auteur possède déjà cet identifiant."
+    assert str(error.value) == "Un auteur possède déjà cet identifiant."
 
 def test_get_auteur_existant(database:Database):
     # résultat attendu : une instance d'Auteur est retournée
