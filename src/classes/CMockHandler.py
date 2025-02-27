@@ -343,7 +343,7 @@ class MockHandler(DataHandler):
         lesResEnCours:list = []
         uneReservation:Reservation
         for uneReservation in lesReservations:
-            if(uneReservation.date_heure_fin >= datetime.now() or uneReservation.rendu == False):
+            if( (uneReservation.date_heure_fin >= datetime.now() and uneReservation.rendu == True) or uneReservation.rendu == False):
                 lesResEnCours.append(uneReservation)
         return lesResEnCours
     
