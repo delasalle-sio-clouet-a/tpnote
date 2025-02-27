@@ -1,10 +1,11 @@
 import pytest
 from flask.testing import FlaskClient
+from src.classes.CDatabase import Database
 
-def test_ajout_format_valide():
+def test_ajout_format_valide(db:Database):
     # résultat attendu : format ajouté
     assert False
 
-def test_ajout_format_duplicata():
+def test_ajout_format_duplicata(db:Database):
     # résultat attendu : format NON ajouté
     assert False

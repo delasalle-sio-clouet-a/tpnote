@@ -1,9 +1,9 @@
 from src.app import app, db
 from sqlalchemy import ForeignKey
 
-class Livres(db.Model):
+class Adherents(db.Model):
 
-    __tablename__ = "livres"
+    __tablename__ = "adherents"
 
     code_adherent = db.Column(db.String(5), primary_key=True, nullable=False)
 
