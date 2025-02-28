@@ -19,6 +19,9 @@ class DataHandler:
     #############
     # ADHERENTS #
     #############
+    def adherents_get_all(self) -> list:
+        raise UndefinedMethodException()
+    
     def adherents_get_by_code(self, jsonData:str) -> Adherent:
         raise UndefinedMethodException()
     
@@ -28,6 +31,9 @@ class DataHandler:
     ###########
     # AUTEURS #
     ###########
+    def auteurs_get_all(self) -> list:
+        raise UndefinedMethodException()
+    
     def auteurs_get_by_id(self, jsonData:str) -> Auteur:
         raise UndefinedMethodException()
     
@@ -37,6 +43,9 @@ class DataHandler:
     ############
     # EDTIEURS #
     ############
+    def editeurs_get_all(self) -> list:
+        raise UndefinedMethodException()
+    
     def editeurs_get_by_id(self, jsonData:str) -> Editeur:
         raise UndefinedMethodException()
     
@@ -46,6 +55,9 @@ class DataHandler:
     ###########
     # FORMATS #
     ###########
+    def formats_get_all(self) -> list:
+        raise UndefinedMethodException()
+    
     def formats_get_by_id(self, jsonData:str) -> Format:
         raise UndefinedMethodException()
     
@@ -55,6 +67,9 @@ class DataHandler:
     ##########
     # LIVRES #
     ##########
+    def livres_get_all(self) -> list:
+        raise UndefinedMethodException()
+    
     def livres_get_by_isbn(self, jsonData:str) -> Livre:
         raise UndefinedMethodException()
     
@@ -64,6 +79,9 @@ class DataHandler:
     ################
     # RESERVATIONS #
     ################
+    def reservations_get_all(self) -> list:
+        raise UndefinedMethodException()
+    
     def reservations_get_by_id(self, _id:int) -> bool:
         raise UndefinedMethodException()
 
