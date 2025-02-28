@@ -14,6 +14,7 @@ Commande pour avoir le % de coverage :
 
 Pour exécuter l'api web (adhérents seulement):
 1. Se déplacer dans le répertoire 'src' du projet
+2. Lancer Docker et exécuter 'docker compose up' pour initialiser la base de données
 2. Executer la commande 'python -m flask --app app run'
 3. Routes disponibles :
 	- http://127.0.0.1:5000/adherents/ajouter (POST)

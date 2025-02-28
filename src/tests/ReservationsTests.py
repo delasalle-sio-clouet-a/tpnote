@@ -116,20 +116,3 @@ def test_reservation_envoi_mail_retard(database:Database):
     assert resultat == True     # True = mail envoyé
     assert "Le fond de la bibliothèque" in contenuMail
     assert "TDD : le guide ultime" in contenuMail
-    
-
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
-# A FAIRE : TEST ANNULATION RESERVATION (donc delete)
