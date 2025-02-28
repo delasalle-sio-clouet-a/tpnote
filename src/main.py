@@ -14,7 +14,7 @@ def create_app(_config) -> Flask:
 
     handler:SqlHandler = SqlHandler()
     handler.set_app(app)
-    handler.set_connection_data("postgresql+pg8000","localhost","innomop","laval53","tpnote")
+    handler.set_connection_data("postgresql+pg8000","localhost","moi","laval53","tpnote")
     handler.init_db()
     database:Database = Database(handler)
 

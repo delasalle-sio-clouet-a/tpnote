@@ -1,0 +1,16 @@
+# rappel : "docker-compose up -d" pour lancer
+
+volumes:
+  PostgresVolume:
+
+services:
+  PostgresService:
+    image: postgres:17.2-bullseye
+    volumes:
+      - PostgresVolume:/usr/share/postgres/data
+    environment:
+      - POSTGRES_USER=moi
+      - POSTGRES_PASSWORD=laval53
+      - POSTGRES_DB=tpnote
+    ports:
+      - 5432:5432

@@ -27,5 +27,10 @@ app:Flask
 database:Database
 app, database = start()
 
+from src.classes.CSqlHandler import SqlHandler
+with app.app_context():
+    sql_handler:SqlHandler = database.handler
+    Base.metadata.create_all(bind=sql_handler.db.engine)
+
 from src.controllers.ApiController import apiBP
 app.register_blueprint(apiBP)

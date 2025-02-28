@@ -43,8 +43,9 @@ class Database:
                 raise DuplicataException("Ce code adhérent est déjà utilisé.")
             
         # controle email valide
-        regex = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+        regex = r"^[a-zA-Z0-9_.+-]+\@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
         if(_adherent.email == None or re.match(regex, str(_adherent.email)) is None):
+            print(_adherent.email)
             raise InvalidFormatException("Format de l'email invalide.")
         
         # contrôle code adhérent (longueur + numérique)
