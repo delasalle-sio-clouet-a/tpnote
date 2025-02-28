@@ -23,82 +23,25 @@ from src.exceptions.UndefinedMethodException import UndefinedMethodException
 class SqlHandler(DataHandler):
     """
     Classe héritant de DataHandler.
-    Permet d'interagir avec des données de test, configurables à l'aide des fichiers du répertoire 'config/database_filler'.
+    Permet d'interagir avec des données de d'une base de données SQL.
     """
     def __init__(self):
         super().__init__()
 
         self.db = SQLAlchemy()
-
-        self.data:dict = {} # jdd actif
-        self.dataYaml:dict = {} # données des fichiers lus
-        self.repertoireDatabaseFiller = os.path.join(os.path.abspath(f"{os.path.split(__file__)[0]}/../../config"), "database_filler")
-
-        self._lecture_fichiers() # préparation du jeu de données
-
-
+        self.app = None
 
     def set_app(self, _app:Flask):
-        self.db.init_app(_app)
+        self.app = _app
     
     def set_connection_data(self, prefixe:str, server:str, user:str, password:str, base:str):
         self.connectionString = f"{prefixe}://{user}:{password}@{server}/{base}"
+        self.app.config['SQLALCHEMY_DATABASE_URI'] = self.connectionString
+        # à désactiver car gourmand en ressources
+        self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-
-
-    def _lecture_fichiers(self):
-        """
-        METHODE PRIVEE. Récupère les fichiers YAML du répertoire 'config/database_filler' et en extrait les données en lecture.
-        """
-        print("<DatabaseFiller> Chargement des fichiers...")
-        # lister tous les fichiers yaml présents
-        lesFichiers = [os.path.join(self.repertoireDatabaseFiller,file) for file in os.listdir(self.repertoireDatabaseFiller) if file.endswith(".yaml")]
-        print(f"<DatabaseFiller> Fichiers trouvés : {lesFichiers}")
-
-        # pour chaque fichier :
-        # - son nom est un nombre + nom du modèke concerné (le nombre sert à lire les fichiers dans un certain ordre)
-        # - l'attribut 'type' définit s'il s'agit d'un remplissage ou d'un jeu de test
-        # - l'attribut 'data' est une liste avec les données à ajouter :
-        #   - liste de clés-valeurs, avec la clé le nom du champ dans la base de données à affecter
-        for unFichier in lesFichiers:
-            repertoire, nom = os.path.split(unFichier)
-            nomModele = ''.join(c for c in nom.split(".")[0] if not c.isdigit()) # récupérer le nom du modèle concerné
-            with open(unFichier, "r", encoding="utf-8") as file:
-                config:dict = yaml.load(file, Loader=yaml.FullLoader)
-                type:str = config.get("type","remplissage") # type défini à 'remplissage' si la valeur est absente du fichier
-                data:list = config.get("data", []) # les données à ajouter
-
-                # conserver les données en mémoire
-                if(data != None and len(data) > 0):
-                    self.dataYaml[nomModele] = data
-                    for uneData in data:
-                        instance = globals()[nomModele]()
-                        for uneVariable in uneData:
-
-                            if("date" in uneVariable):
-                                if("heure" in uneVariable):
-                                    uneData[uneVariable] = datetime.strptime(uneData[uneVariable], "%Y-%m-%d %H:%M:%S")
-                                else:
-                                    uneData[uneVariable] = datetime.strptime(uneData[uneVariable], "%Y-%m-%d").date()
-
-                            instance.__dict__[uneVariable] = uneData[uneVariable]
-
-                        if(nomModele not in self.data):
-                            self.data[nomModele] = []
-                        self.data[nomModele].append(instance)
-                    print(f"<DatabaseFiller> Fichier '{nom}' valide et ajouté en tant que fichier de remplissage.")
-                else:
-                    print(f"<DatabaseFiller> Fichier '{nom}' ignoré : aucune donnée à insérer.")
-
-        print(self.dataYaml)
-        print(self.data)
-        print("<DatabaseFiller> Chargement des fichiers terminé.")
-
-
-
-    def getData(self, _modele:str) -> list:
-        return list(self.data.get(_modele, []))
-
+    def init_db(self):
+        self.db.init_app(self.app)
 
     #############
     # ADHERENTS #

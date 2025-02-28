@@ -1,9 +1,10 @@
-from src.app import app, db
+from src.app import Base
 from sqlalchemy import ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, Date, DateTime
 
-class Editeurs(db.Model):
+class Editeurs(Base):
 
     __tablename__ = "editeurs"
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    nom = db.Column(db.String(40), nullable=False)
+    id = Column(Integer, primary_key=True, nullable=False)
+    nom = Column(String(40), nullable=False)

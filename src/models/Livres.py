@@ -1,14 +1,15 @@
-from src.app import app, db
+from src.app import Base
 from sqlalchemy import ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, Date, DateTime
 
-class Livres(db.Model):
+class Livres(Base):
 
     __tablename__ = "livres"
 
-    code_isbn = db.Column(db.String(10), primary_key=True, nullable=False)
+    code_isbn = Column(String(10), primary_key=True, nullable=False)
 
-    titre = db.Column(db.String(10), nullable=False)
+    titre = Column(String(10), nullable=False)
 
-    id_auteur = db.Column(db.Integer, ForeignKey("auteurs.id"), nullable=False)
-    id_editeur = db.Column(db.Integer, ForeignKey("editeurs.id"), nullable=False)
-    id_format = db.Column(db.Integer, ForeignKey("formats.id"), nullable=False)
+    id_auteur = Column(Integer, ForeignKey("auteurs.id"), nullable=False)
+    id_editeur = Column(Integer, ForeignKey("editeurs.id"), nullable=False)
+    id_format = Column(Integer, ForeignKey("formats.id"), nullable=False)

@@ -1,9 +1,10 @@
-from src.app import app, db
+from src.app import Base
 from sqlalchemy import ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, Date, DateTime
 
-class Formats(db.Model):
+class Formats(Base):
 
     __tablename__ = "formats"
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    libelle = db.Column(db.String(40), nullable=False)
+    id = Column(Integer, primary_key=True, nullable=False)
+    libelle = Column(String(40), nullable=False)
