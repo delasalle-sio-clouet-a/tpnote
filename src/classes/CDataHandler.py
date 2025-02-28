@@ -1,5 +1,7 @@
 from src.exceptions.UndefinedMethodException import UndefinedMethodException
 
+from flask import Flask
+
 from src.classes.CAdherent import Adherent
 from src.classes.CAuteur import Auteur
 from src.classes.CEditeur import Editeur
@@ -15,6 +17,12 @@ class DataHandler:
     def __init__(self):
         # ne rien faire
         pass
+
+    def set_app(self, _app:Flask):
+        raise UndefinedMethodException()
+    
+    def set_connection_data(self, prefixe:str, server:str, user:str, password:str, base:str):
+        raise UndefinedMethodException()
 
     #############
     # ADHERENTS #

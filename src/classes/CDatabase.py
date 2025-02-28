@@ -128,6 +128,11 @@ class Database:
         lesExistants = self.livres_get_all()
         unExistant:Livre
 
+        # controle aucun champ vide
+        interdit = [None, ""]
+        if(_livre.code_isbn.strip() in interdit or _livre.id_auteur in interdit or _livre.id_editeur in interdit or _livre.id_format in interdit or _livre.titre in interdit):
+            raise MissingDataException("Données incomplètes.")
+
         # controle isbn unique
         for unExistant in lesExistants:
             if(unExistant.code_isbn == _livre.code_isbn):

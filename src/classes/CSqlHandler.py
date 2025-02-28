@@ -1,9 +1,11 @@
 import os, yaml, re
 
-from src.classes.CDataHandler import DataHandler
+from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
 
 from datetime import timedelta, date, datetime
 
+from src.classes.CDataHandler import DataHandler
 from src.classes.CAdherent import Adherent
 from src.classes.CAuteur import Auteur
 from src.classes.CEditeur import Editeur
@@ -18,7 +20,7 @@ from src.exceptions.InvalidTypeException import InvalidTypeException
 from src.exceptions.MissingDataException import MissingDataException
 from src.exceptions.UndefinedMethodException import UndefinedMethodException
 
-class MockHandler(DataHandler):
+class SqlHandler(DataHandler):
     """
     Classe héritant de DataHandler.
     Permet d'interagir avec des données de test, configurables à l'aide des fichiers du répertoire 'config/database_filler'.
@@ -26,17 +28,22 @@ class MockHandler(DataHandler):
     def __init__(self):
         super().__init__()
 
+        self.db = SQLAlchemy()
+
         self.data:dict = {} # jdd actif
         self.dataYaml:dict = {} # données des fichiers lus
         self.repertoireDatabaseFiller = os.path.join(os.path.abspath(f"{os.path.split(__file__)[0]}/../../config"), "database_filler")
 
         self._lecture_fichiers() # préparation du jeu de données
 
-    def set_app(self, _app):
-        return  # ne rien faire
+
+
+    def set_app(self, _app:Flask):
+        self.db.init_app(_app)
     
     def set_connection_data(self, prefixe:str, server:str, user:str, password:str, base:str):
-        return  # ne rien faire
+        self.connectionString = f"{prefixe}://{user}:{password}@{server}/{base}"
+
 
 
     def _lecture_fichiers(self):

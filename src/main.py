@@ -4,8 +4,16 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 
+from src.classes.CDatabase import Database
+from src.classes.CSqlHandler import SqlHandler
+from src.classes.CDataHandler import DataHandler
+
 def create_app(_config) -> Flask:
     app:Flask = Flask()
+
+    handler:DataHandler = SqlHandler()
+    handler.set_app(app)
+    database:Database = Database(handler)
 
     return app
 
